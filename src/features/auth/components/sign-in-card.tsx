@@ -1,6 +1,8 @@
 import React from "react";
 import { useForm } from "react-hook-form";
+import Link from "next/link";
 
+import { signinSchema } from "../schema";
 import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 
@@ -9,24 +11,30 @@ import { FaGithub } from "react-icons/fa";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import DottedSeparator from "@/components/dotted-separator";
-import { Form, FormControl, FormField, FormItem } from "@/components/ui/form";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormMessage,
+} from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import Link from "next/link";
-
-const formSchema = z.object({
-  email: z.string().trim().min(4).email(),
-  password: z.string().trim().min(8),
-});
+import { useLogin } from "../invoke-api/user-login";
 
 const SignInCard = () => {
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  const { mutate } = useLogin();
+  const form = useForm<z.infer<typeof signinSchema>>({
+    resolver: zodResolver(signinSchema),
     defaultValues: {
       email: "",
       password: "",
     },
   });
+
+  const onSubmit = async (value: z.infer<typeof signinSchema>) => {
+    mutate({ json: value });
+  };
   return (
     <Card className="shadow-none border-none md:w-[487px] size-full">
       <CardHeader className="flex justify-center items-center p-7 text-center">
@@ -37,7 +45,7 @@ const SignInCard = () => {
       </div>
       <CardContent className="p-7">
         <Form {...form}>
-          <form className="space-y-4">
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
             <FormField
               name="email"
               control={form.control}
@@ -50,6 +58,7 @@ const SignInCard = () => {
                       {...field}
                     />
                   </FormControl>
+                  <FormMessage />
                 </FormItem>
               )}
             />
@@ -66,6 +75,7 @@ const SignInCard = () => {
                       {...field}
                     />
                   </FormControl>
+                  <FormMessage />
                 </FormItem>
               )}
             />

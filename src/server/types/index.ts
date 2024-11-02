@@ -1,4 +1,6 @@
+import { OpenAPIHono, RouteConfig, RouteHandler } from "@hono/zod-openapi";
 import { Context, Env, ValidationTargets } from "hono";
+import { PinoLogger } from "hono-pino";
 import { z, ZodSchema } from "zod";
 
 // for controller to service file
@@ -32,3 +34,18 @@ export type HonoContext<
   : Context<P, T, InputStructure<K, D>>;
 
 //end
+
+// create app
+
+export interface AppBindings {
+  Variables: {
+    logger: PinoLogger;
+  };
+}
+
+export type AppOpenAPI = OpenAPIHono<AppBindings>;
+
+export type AppRouteHandler<R extends RouteConfig> = RouteHandler<
+  R,
+  AppBindings
+>;

@@ -10,13 +10,14 @@ export default class AuthService {
 
   async SignIn(data: z.infer<typeof signinSchema>) {
     const { email, password } = data;
-    const user = await this.repository.getUserByEmail(email);
-    console.log({ email, password, user });
+    await this.repository.getUserByEmail(email);
+
     return {
       data: {
-        user,
         email,
+        password,
       },
+      success: true,
     };
   }
 }

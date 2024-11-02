@@ -1,6 +1,6 @@
-import { signinSchema } from "../schema";
-import { HonoContext } from "@/server/types";
 import AuthService from "./auth.service";
+import { SignInRoute } from "./auth.routes";
+import { AppRouteHandler } from "@/server/types";
 
 export default class AuthController {
   private repository: AuthService;
@@ -8,10 +8,16 @@ export default class AuthController {
     this.repository = new AuthService();
   }
 
-  async SignIn(context: HonoContext<"json", "/signin", typeof signinSchema>) {
-    const { email, password } = context.req.valid("json");
+  SignIn: AppRouteHandler<SignInRoute> = async (context) => {
+    const { email, password } = await context.req.json();
 
     const response = await this.repository.SignIn({ email, password });
-    return context.json(response);
-  }
+
+    return context.json({
+      payload: {
+        ...response.data,
+      },
+      success: response.success,
+    });
+  };
 }

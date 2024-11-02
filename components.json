@@ -16,7 +16,7 @@
     "ui": "@/components/ui",
     "lib": "@/lib",
     "hooks": "@/hooks",
-    "server": "@/server"
-
+    "server": "@/server",
+    "env": "@/env"
   }
 }

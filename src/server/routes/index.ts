@@ -1,5 +1,6 @@
-import { Hono } from "hono";
-import routerV1 from "./v1/index";
-const app = new Hono().route("/v1", routerV1);
+import versionOneRoutes from "./v1/index";
+import { createRouter } from "../utils/create-app";
 
-export default app;
+const routes = createRouter().route("/v1", versionOneRoutes);
+
+export default routes;

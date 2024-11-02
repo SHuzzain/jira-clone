@@ -19,22 +19,24 @@ import DottedSeparator from "@/components/dotted-separator";
 import { Form, FormControl, FormField, FormItem } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-
-const formSchema = z.object({
-  name: z.string().trim().min(4),
-  email: z.string().trim().min(4).email(),
-  password: z.string().trim().min(8),
-});
+import { signUpSchema } from "../schema";
+import { useSignUp } from "../invoke-api/use-signUp";
 
 const SignUpCard = () => {
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  const { mutate } = useSignUp();
+  const form = useForm<z.infer<typeof signUpSchema>>({
+    resolver: zodResolver(signUpSchema),
     defaultValues: {
-      name: "",
+      fullname: "",
       email: "",
       password: "",
+      confirmPassword: "",
     },
   });
+
+  const onSubmit = async (value: z.infer<typeof signUpSchema>) => {
+    mutate({ json: value });
+  };
   return (
     <Card className="shadow-none border-none md:w-[487px] size-full">
       <CardHeader className="flex justify-center items-center p-7 text-center">
@@ -58,9 +60,9 @@ const SignUpCard = () => {
       </div>
       <CardContent className="p-7">
         <Form {...form}>
-          <form className="space-y-4">
+          <form className="space-y-4" onSubmit={form.handleSubmit(onSubmit)}>
             <FormField
-              name="name"
+              name="fullname"
               control={form.control}
               render={({ field }) => (
                 <FormItem>
@@ -102,6 +104,23 @@ const SignUpCard = () => {
                 </FormItem>
               )}
             />
+
+            <FormField
+              name="confirmPassword"
+              control={form.control}
+              render={({ field }) => (
+                <FormItem>
+                  <FormControl>
+                    <Input
+                      type="password"
+                      placeholder="Confirm password"
+                      {...field}
+                    />
+                  </FormControl>
+                </FormItem>
+              )}
+            />
+
             <Button type="submit" size={"lg"} className="w-full">
               Sign up
             </Button>

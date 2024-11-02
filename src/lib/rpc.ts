@@ -4,6 +4,6 @@ import env from "@/config/env";
 
 const client = hc<Apptype>(env.NEXT_PUBLIC_BASE_URL);
 
-const clientV1 = client.api.v1.auth.signin.$post;
+const clientV1 = client.api.v1;
 
 export { client, clientV1 };

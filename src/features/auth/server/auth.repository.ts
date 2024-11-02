@@ -3,4 +3,9 @@ export class AuthRepository {
     console.log({ email });
     return true;
   }
+
+  async SignUpWithEmailAndPassword(email: string) {
+    console.log({ email });
+    return true;
+  }
 }

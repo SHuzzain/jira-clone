@@ -3,15 +3,16 @@ import { SignInRoute, SignUpRoute } from "./auth.routes";
 import { AppRouteHandler } from "@/server/types";
 
 export default class AuthController {
-  private repository: AuthService;
+  private service: AuthService;
+
   constructor() {
-    this.repository = new AuthService();
+    this.service = new AuthService();
   }
 
   SignIn: AppRouteHandler<SignInRoute> = async (context) => {
-    const { email, password } = await context.req.valid("json");
+    const { email, password } = context.req.valid("json");
 
-    const response = await this.repository.SignIn({ email, password });
+    const response = await this.service.SignIn({ email, password });
 
     return context.json({
       success: response.success,
@@ -20,9 +21,9 @@ export default class AuthController {
 
   SignUp: AppRouteHandler<SignUpRoute> = async (context) => {
     const { email, password, confirmPassword, fullname } =
-      await context.req.valid("json");
+      context.req.valid("json");
 
-    const response = await this.repository.SignUp({
+    const response = await this.service.SignUp({
       email,
       password,
       confirmPassword,

@@ -1,13 +1,14 @@
-import React from "react";
-import { useForm } from "react-hook-form";
 import Link from "next/link";
+import React from "react";
 
-import { FcGoogle } from "react-icons/fc";
-import { FaGithub } from "react-icons/fa";
-
-import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { FaGithub } from "react-icons/fa";
+import { FcGoogle } from "react-icons/fc";
+import * as z from "zod";
 
+import DottedSeparator from "@/components/dotted-separator";
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
@@ -15,12 +16,11 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import DottedSeparator from "@/components/dotted-separator";
 import { Form, FormControl, FormField, FormItem } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { signUpSchema } from "../schema";
+
 import { useSignUp } from "../invoke-api/use-signUp";
+import { signUpSchema } from "../schema";
 
 const SignUpCard = () => {
   const { mutate } = useSignUp();
@@ -38,19 +38,19 @@ const SignUpCard = () => {
     mutate({ json: value });
   };
   return (
-    <Card className="shadow-none border-none md:w-[487px] size-full">
-      <CardHeader className="flex justify-center items-center p-7 text-center">
+    <Card className="size-full border-none shadow-none md:w-[487px]">
+      <CardHeader className="flex items-center justify-center p-7 text-center">
         <CardTitle className="text-2xl">Sign Up</CardTitle>
         <CardDescription>
           By signing up, you agree to our{" "}
           <Link
             href={"/privacy"}
-            className="hover:underline decoration-blue-700"
+            className="decoration-blue-700 hover:underline"
           >
             <span className="text-blue-700">Privacy Policy</span>
           </Link>{" "}
           and{" "}
-          <Link href={"/terms"} className="hover:underline decoration-blue-700">
+          <Link href={"/terms"} className="decoration-blue-700 hover:underline">
             <span className="text-blue-700">Terms of Service</span>
           </Link>
         </CardDescription>
@@ -151,7 +151,7 @@ const SignUpCard = () => {
       <CardContent className="p-7 text-center">
         <p>
           Already have an account?{" "}
-          <Link href="/sign-in" className="hover:underline decoration-blue-700">
+          <Link href="/sign-in" className="decoration-blue-700 hover:underline">
             <span className="text-blue-700">Sign in</span>
           </Link>
         </p>

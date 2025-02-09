@@ -1,16 +1,15 @@
-import React from "react";
-import { useForm } from "react-hook-form";
 import Link from "next/link";
+import React from "react";
 
-import { signinSchema } from "../schema";
-import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-
-import { FcGoogle } from "react-icons/fc";
+import { useForm } from "react-hook-form";
 import { FaGithub } from "react-icons/fa";
+import { FcGoogle } from "react-icons/fc";
+import * as z from "zod";
 
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import DottedSeparator from "@/components/dotted-separator";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   Form,
   FormControl,
@@ -19,8 +18,9 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
+
 import { useLogin } from "../invoke-api/user-login";
+import { signinSchema } from "../schema";
 
 const SignInCard = () => {
   const { mutate } = useLogin();
@@ -36,8 +36,8 @@ const SignInCard = () => {
     mutate({ json: value });
   };
   return (
-    <Card className="shadow-none border-none md:w-[487px] size-full">
-      <CardHeader className="flex justify-center items-center p-7 text-center">
+    <Card className="size-full border-none shadow-none md:w-[487px]">
+      <CardHeader className="flex items-center justify-center p-7 text-center">
         <CardTitle className="text-2xl">Welcome back!</CardTitle>
       </CardHeader>
       <div className="mb-2 px-7">
@@ -109,7 +109,7 @@ const SignInCard = () => {
       <CardContent className="p-7 text-center">
         <p>
           Don&apos;t have an account?{" "}
-          <Link href="/sign-up" className="hover:underline decoration-blue-700">
+          <Link href="/sign-up" className="decoration-blue-700 hover:underline">
             <span className="text-blue-700">Sign up</span>
           </Link>
         </p>

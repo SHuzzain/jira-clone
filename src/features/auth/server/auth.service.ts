@@ -1,6 +1,7 @@
 import { z } from "zod";
+
+import { signUpSchema, signinSchema } from "../schema";
 import { AuthRepository } from "./auth.repository";
-import { signinSchema, signUpSchema } from "../schema";
 
 export default class AuthService {
   private repository: AuthRepository;

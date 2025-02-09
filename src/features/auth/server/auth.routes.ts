@@ -1,10 +1,12 @@
-import { createRouter } from "@/server/utils/create-app";
 import { createRoute } from "@hono/zod-openapi";
-import { ResponseSchema } from "@/server/utils/zod-response-schema";
-import { jsonContent } from "stoker/openapi/helpers";
 import * as HttpStatusCode from "stoker/http-status-codes";
+import { jsonContent } from "stoker/openapi/helpers";
+
+import { createRouter } from "@/server/utils/create-app";
+import { ResponseSchema } from "@/server/utils/zod-response-schema";
+
+import { signUpSchema, signinSchema } from "../schema";
 import AuthController from "./auth.controller";
-import { signinSchema, signUpSchema } from "../schema";
 
 const authController = new AuthController();
 

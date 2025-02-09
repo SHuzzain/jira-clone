@@ -1,5 +1,5 @@
+import fluid, { extract, fontSize, screens } from "fluid-tailwind";
 import type { Config } from "tailwindcss";
-import fluid, { extract, screens, fontSize } from "fluid-tailwind";
 import animation from "tailwindcss-animate";
 
 const config: Config = {

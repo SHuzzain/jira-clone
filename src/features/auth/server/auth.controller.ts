@@ -1,6 +1,7 @@
-import AuthService from "./auth.service";
-import { SignInRoute, SignUpRoute } from "./auth.routes";
 import { AppRouteHandler } from "@/server/types";
+
+import { SignInRoute, SignUpRoute } from "./auth.routes";
+import AuthService from "./auth.service";
 
 export default class AuthController {
   private service: AuthService;

@@ -1,7 +1,7 @@
 import { OpenAPIHono, RouteConfig, RouteHandler } from "@hono/zod-openapi";
 import { Context, Env, ValidationTargets } from "hono";
 import { PinoLogger } from "hono-pino";
-import { z, ZodSchema } from "zod";
+import { ZodSchema, z } from "zod";
 
 // for controller to service file
 
@@ -28,10 +28,11 @@ export type HonoContext<
   D extends Target,
   T extends string,
   K extends ZodSchema,
-  P extends Env = object
-> = HasUndefined<P> extends true
-  ? Context<object, T, InputStructure<K, D>>
-  : Context<P, T, InputStructure<K, D>>;
+  P extends Env = object,
+> =
+  HasUndefined<P> extends true
+    ? Context<object, T, InputStructure<K, D>>
+    : Context<P, T, InputStructure<K, D>>;
 
 //end
 

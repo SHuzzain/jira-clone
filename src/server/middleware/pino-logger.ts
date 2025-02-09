@@ -1,6 +1,7 @@
-import env from "@/config/env";
 import { pinoLogger } from "hono-pino";
 import pino from "pino";
+
+import env from "@/config/env";
 
 export function pinologgerMW() {
   return pinoLogger({
@@ -13,9 +14,8 @@ export function pinologgerMW() {
               target: "pino-pretty",
               options: {
                 colorize: true,
-              }
+              },
             },
-            
           }
     ),
     http: {

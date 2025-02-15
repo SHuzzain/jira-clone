@@ -1,3 +1,5 @@
+"use client";
+
 import Link from "next/link";
 import React from "react";
 
@@ -36,8 +38,8 @@ const SignInCard = () => {
     mutate({ json: value });
   };
   return (
-    <Card className="size-full border-none shadow-none md:w-[487px]">
-      <CardHeader className="flex items-center justify-center p-7 text-center">
+    <Card className="shadow-none border-none md:w-[487px] size-full">
+      <CardHeader className="flex justify-center items-center p-7 text-center">
         <CardTitle className="text-2xl">Welcome back!</CardTitle>
       </CardHeader>
       <div className="mb-2 px-7">
@@ -71,7 +73,7 @@ const SignInCard = () => {
                   <FormControl>
                     <Input
                       type="password"
-                      placeholder="Enter password"
+                      placeholder="Enter your password"
                       {...field}
                     />
                   </FormControl>

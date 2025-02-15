@@ -1,3 +1,5 @@
+"use client";
+
 import Link from "next/link";
 import React from "react";
 
@@ -19,11 +21,11 @@ import {
 import { Form, FormControl, FormField, FormItem } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 
-import { useSignUp } from "../invoke-api/use-signUp";
+import { useSignup } from "../invoke-api/use-signup";
 import { signUpSchema } from "../schema";
 
 const SignUpCard = () => {
-  const { mutate } = useSignUp();
+  const { mutate } = useSignup();
   const form = useForm<z.infer<typeof signUpSchema>>({
     resolver: zodResolver(signUpSchema),
     defaultValues: {
@@ -38,19 +40,16 @@ const SignUpCard = () => {
     mutate({ json: value });
   };
   return (
-    <Card className="size-full border-none shadow-none md:w-[487px]">
-      <CardHeader className="flex items-center justify-center p-7 text-center">
+    <Card className="shadow-none border-none md:w-[487px] size-full">
+      <CardHeader className="flex justify-center items-center p-7 text-center">
         <CardTitle className="text-2xl">Sign Up</CardTitle>
         <CardDescription>
           By signing up, you agree to our{" "}
-          <Link
-            href={"/privacy"}
-            className="decoration-blue-700 hover:underline"
-          >
+          <Link href={"/"} className="decoration-blue-700 hover:underline">
             <span className="text-blue-700">Privacy Policy</span>
           </Link>{" "}
           and{" "}
-          <Link href={"/terms"} className="decoration-blue-700 hover:underline">
+          <Link href={"/"} className="decoration-blue-700 hover:underline">
             <span className="text-blue-700">Terms of Service</span>
           </Link>
         </CardDescription>
@@ -67,7 +66,11 @@ const SignUpCard = () => {
               render={({ field }) => (
                 <FormItem>
                   <FormControl>
-                    <Input type="text" placeholder="Enter name" {...field} />
+                    <Input
+                      type="text"
+                      placeholder="Enter full name"
+                      {...field}
+                    />
                   </FormControl>
                 </FormItem>
               )}
@@ -97,7 +100,7 @@ const SignUpCard = () => {
                   <FormControl>
                     <Input
                       type="password"
-                      placeholder="Enter password"
+                      placeholder="Enter your password"
                       {...field}
                     />
                   </FormControl>
@@ -113,7 +116,7 @@ const SignUpCard = () => {
                   <FormControl>
                     <Input
                       type="password"
-                      placeholder="Confirm password"
+                      placeholder="Enter confirm password"
                       {...field}
                     />
                   </FormControl>

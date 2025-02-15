@@ -1,7 +1,7 @@
 import { hc } from "hono/client";
 
 import { Apptype } from "@/app/api/[[...route]]/route";
-import env from "@/config/env";
+import { env } from "@/config/env";
 
 const client = hc<Apptype>(env.NEXT_PUBLIC_BASE_URL);
 

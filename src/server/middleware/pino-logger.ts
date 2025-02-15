@@ -1,7 +1,7 @@
 import { pinoLogger } from "hono-pino";
 import pino from "pino";
 
-import env from "@/config/env";
+import { env } from "@/config/env";
 
 export function pinologgerMW() {
   return pinoLogger({
@@ -9,7 +9,7 @@ export function pinologgerMW() {
       env.NODE_ENV === "production"
         ? undefined
         : {
-            level: env.LOG_LEVEL || "info",
+            level: env.LOG_LEVEL,
             transport: {
               target: "pino-pretty",
               options: {

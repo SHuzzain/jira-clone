@@ -6,7 +6,7 @@ import { clientV1 } from "@/lib/rpc";
 type ResponseType = InferResponseType<(typeof clientV1.auth.signup)["$post"]>;
 type RequestType = InferRequestType<(typeof clientV1.auth.signup)["$post"]>;
 
-export const useSignUp = () => {
+export const useSignup = () => {
   const mutation = useMutation<ResponseType, Error, RequestType>({
     mutationFn: async ({ json }) => {
       const response = await clientV1.auth.signup.$post({ json });

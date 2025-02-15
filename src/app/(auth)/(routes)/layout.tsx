@@ -15,9 +15,9 @@ const RouteLayout = ({ children }: Props) => {
   const pathname = usePathname();
   const isLogin = pathname === "/sign-in";
   return (
-    <main className="min-h-screen bg-neutral-100">
-      <div className="mx-auto max-w-screen-2xl p-4">
-        <nav className="flex items-center justify-between">
+    <main className="bg-neutral-100 min-h-screen">
+      <div className="mx-auto p-4 max-w-screen-2xl">
+        <nav className="flex justify-between items-center">
           <Image src={"/logo.svg"} height={50} width={50} alt="logo" priority />
           <Button variant={"secondary"} asChild>
             <Link href={isLogin ? "/sign-up" : "/sign-in"}>
@@ -27,7 +27,7 @@ const RouteLayout = ({ children }: Props) => {
         </nav>
       </div>
 
-      <div className="flex flex-col items-center justify-center ~p-4/14">
+      <div className="flex flex-col justify-center items-center ~px-4/14">
         {children}
       </div>
     </main>

@@ -9,7 +9,6 @@ export const env = createEnv({
     LOG_LEVEL: z.enum(["fatal", "error", "warn", "info", "debug", "trace"]),
     NEXT_APPWRITE_KEY: z.string(),
   },
-  isServer: typeof window === "undefined",
   client: {
     NEXT_PUBLIC_BASE_URL: z.string().url(),
     NEXT_PUBLIC_APPWRITE_PROJECT: z.string(),

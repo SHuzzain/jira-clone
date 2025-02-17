@@ -1,6 +1,12 @@
+import { setCookie } from "hono/cookie";
+import * as HttpStatusCode from "stoker/http-status-codes";
+
+import { createAdminClient } from "@/lib/client/appwrite";
+import { createAdminServer } from "@/lib/server/appwrite";
 import { AppRouteHandler } from "@/server/types";
 
-import { SignInRoute, SignUpRoute } from "./auth.routes";
+import { AUTH_COOKIE_EXPIRES } from "../constants";
+import { SignInRoute, SignUpRoute, VerificationRoute } from "./auth.routes";
 import AuthService from "./auth.service";
 
 export default class AuthController {
@@ -21,18 +27,43 @@ export default class AuthController {
   };
 
   SignUp: AppRouteHandler<SignUpRoute> = async (context) => {
-    const { email, password, confirmPassword, fullname } =
-      context.req.valid("json");
+    try {
+      const { email, password, confirmPassword, fullname } =
+        context.req.valid("json");
 
-    const response = await this.service.SignUp({
-      email,
-      password,
-      confirmPassword,
-      fullname,
-    });
+      const response = await this.service.SignUp({
+        email,
+        password,
+        confirmPassword,
+        fullname,
+      });
 
+      const { account } = await createAdminServer();
+
+      const session = await account.getSession(response.data.$id);
+
+      return context.json({
+        data: session,
+        success: true,
+      });
+    } catch (error) {
+      const logger = context.get("logger");
+      logger.error(error);
+
+      return context.json(
+        { success: false, error },
+        HttpStatusCode.INTERNAL_SERVER_ERROR
+      );
+    }
+  };
+
+  Verification: AppRouteHandler<VerificationRoute> = async (context) => {
+    const params = context.req.valid("json");
+
+    const response = await this.service.Verification(params);
     return context.json({
-      success: response.success,
+      payload: response.data,
+      success: true,
     });
   };
 }

@@ -1,6 +1,10 @@
+import { ID } from "appwrite";
 import { z } from "zod";
 
-import { signUpSchema, signinSchema } from "../schema";
+import { createAdminClient } from "@/lib/client/appwrite";
+import { createAdminServer } from "@/lib/server/appwrite";
+
+import { signUpSchema, signinSchema, verificationSchema } from "../schema";
 import { AuthRepository } from "./auth.repository";
 
 export default class AuthService {
@@ -11,7 +15,6 @@ export default class AuthService {
 
   async SignIn(data: z.infer<typeof signinSchema>) {
     const { email, password } = data;
-    await this.repository.getUserByEmail(email);
 
     return {
       data: {
@@ -23,18 +26,29 @@ export default class AuthService {
   }
 
   async SignUp(data: z.infer<typeof signUpSchema>) {
-    const { email, password, confirmPassword, fullname } = data;
+    const { email, password, fullname } = data;
 
-    await this.repository.getUserByEmail(email);
+    const { auth } = await createAdminServer();
+
+    const user = await auth.createBcryptUser(
+      ID.unique(),
+      email,
+      password,
+      fullname
+    );
 
     return {
-      data: {
-        email,
-        password,
-        confirmPassword,
-        fullname,
-      },
-      success: true,
+      data: user,
+    };
+  }
+
+  async Verification(data: z.infer<typeof verificationSchema>) {
+    const { account } = await createAdminClient();
+    const server = await createAdminServer();
+    const session = await account.createSession(data.userId, data.token);
+
+    return {
+      data: response,
     };
   }
 }

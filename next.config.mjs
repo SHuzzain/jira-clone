@@ -10,7 +10,7 @@ const jiti = createJiti(fileURLToPath(import.meta.url));
 /** @type {import('next').NextConfig} */
 const nextConfig = {
     output: "standalone",
-
+    serverExternalPackages: ["pino", "pino-pretty"],
     transpilePackages: ["@t3-oss/env-nextjs", "@t3-oss/env-core"],
 };
 

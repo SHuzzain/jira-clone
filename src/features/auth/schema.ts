@@ -38,3 +38,12 @@ export const signUpSchema = z
     }
   })
   .openapi("SignUp");
+
+export const verificationSchema = z
+  .object({
+    token: z.string().min(1, "Minimum 6 characters").openapi({
+      example: "123456",
+    }),
+    userId: z.string().min(1, "Minimum 1 characters"),
+  })
+  .openapi("Verification");

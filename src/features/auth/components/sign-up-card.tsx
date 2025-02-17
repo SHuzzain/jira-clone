@@ -1,7 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import React from "react";
+import { useRouter } from "next/navigation";
+import React, { useEffect } from "react";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -25,7 +26,8 @@ import { useSignup } from "../invoke-api/use-signup";
 import { signUpSchema } from "../schema";
 
 const SignUpCard = () => {
-  const { mutate } = useSignup();
+  const { mutate, isSuccess } = useSignup();
+  const router = useRouter();
   const form = useForm<z.infer<typeof signUpSchema>>({
     resolver: zodResolver(signUpSchema),
     defaultValues: {
@@ -35,6 +37,13 @@ const SignUpCard = () => {
       confirmPassword: "",
     },
   });
+
+  useEffect(() => {
+    if (isSuccess) {
+      router.push("verify");
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isSuccess]);
 
   const onSubmit = async (value: z.infer<typeof signUpSchema>) => {
     mutate({ json: value });

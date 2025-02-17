@@ -1,9 +1,9 @@
-import { Account, Client } from "node-appwrite";
+import { Account, Client, Users } from "node-appwrite";
 import "server-only";
 
 import { env } from "@/config/env";
 
-export async function createAdminClient() {
+export async function createAdminServer() {
   const client = new Client()
     .setEndpoint(env.NEXT_PUBLIC_APPWRITE_ENDPOINT)
     .setProject(env.NEXT_PUBLIC_APPWRITE_PROJECT)
@@ -12,6 +12,9 @@ export async function createAdminClient() {
   return {
     get account() {
       return new Account(client);
+    },
+    get auth() {
+      return new Users(client);
     },
   };
 }

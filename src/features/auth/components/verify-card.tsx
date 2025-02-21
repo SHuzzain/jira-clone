@@ -1,11 +1,7 @@
 "use client";
 
 import * as React from "react";
-
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
-
+import { BeatLoader } from "react-spinners";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -15,43 +11,30 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormMessage,
-} from "@/components/ui/form";
-import {
-  InputOTP,
-  InputOTPGroup,
-  InputOTPSeparator,
-  InputOTPSlot,
-} from "@/components/ui/input-otp";
 
 import { useVerify } from "../invoke-api/use-verify";
-import { verificationSchema } from "../schema";
 
 type VerifyProps = {
   userId: string;
+  secret: string;
+  expire: Date;
 };
 
-function VerifyCard({ userId }: VerifyProps) {
-  const { mutate } = useVerify();
-  const form = useForm<z.infer<typeof verificationSchema>>({
-    resolver: zodResolver(verificationSchema),
-    defaultValues: {
-      token: "",
-      userId,
-    },
-  });
+function VerifyCard(props: VerifyProps) {
+  const { mutate, isPending } = useVerify();
+  const [status, setStatus] = React.useState("Verifying...");
 
-  function onSubmit(values: z.infer<typeof verificationSchema>) {
-    console.log({ values });
-    mutate({
-      json: values,
-    });
-  }
+  React.useEffect(() => {
+    if (props.userId && props.secret) {
+      mutate(
+        { json: props },
+        {
+          onSuccess: () => setStatus("Verification successful! Redirecting..."),
+          onError: () => setStatus("Verification failed. Try again."),
+        }
+      );
+    }
+  }, [props.userId, props.secret, mutate]);
 
   return (
     <div className="flex items-center justify-center bg-gray-100 px-4">
@@ -59,73 +42,21 @@ function VerifyCard({ userId }: VerifyProps) {
         <CardHeader className="text-center">
           <CardTitle className="text-2xl font-semibold">Jira Clone</CardTitle>
           <CardDescription className="text-gray-600">
-            Enter the 6-digit OTP sent to your email
+            {status}
           </CardDescription>
         </CardHeader>
-        <CardContent>
-          <Form {...form}>
-            <form
-              onSubmit={form.handleSubmit(onSubmit)}
-              className="flex flex-col items-center space-y-6"
-            >
-              <FormField
-                control={form.control}
-                name="token"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormControl>
-                      <InputOTP
-                        onChange={field.onChange}
-                        onBlur={field.onBlur}
-                        disabled={field.disabled}
-                        ref={field.ref}
-                        value={field.value}
-                        maxLength={6}
-                        containerClassName="mx-auto"
-                      >
-                        <InputOTPGroup>
-                          <InputOTPSlot
-                            index={0}
-                            className="h-12 w-12 text-lg"
-                          />
-                          <InputOTPSlot
-                            index={1}
-                            className="h-12 w-12 text-lg"
-                          />
-                          <InputOTPSlot
-                            index={2}
-                            className="h-12 w-12 text-lg"
-                          />
-                        </InputOTPGroup>
-                        <InputOTPSeparator />
-                        <InputOTPGroup>
-                          <InputOTPSlot
-                            index={3}
-                            className="h-12 w-12 text-lg"
-                          />
-                          <InputOTPSlot
-                            index={4}
-                            className="h-12 w-12 text-lg"
-                          />
-                          <InputOTPSlot
-                            index={5}
-                            className="h-12 w-12 text-lg"
-                          />
-                        </InputOTPGroup>
-                      </InputOTP>
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <CardFooter className="w-full px-0">
-                <Button type="submit" className="w-full shadow-lg">
-                  Verify
-                </Button>
-              </CardFooter>
-            </form>
-          </Form>
+        <CardContent className="flex justify-center py-6">
+          {<BeatLoader color="#4F46E5" />}
         </CardContent>
+        <CardFooter className="w-full  flex justify-center">
+          <Button
+            disabled={isPending}
+            onClick={() => mutate({ json: props })}
+            className="w-full shadow-lg"
+          >
+            Retry
+          </Button>
+        </CardFooter>
       </Card>
     </div>
   );

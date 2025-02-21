@@ -1,8 +1,6 @@
 import { setCookie } from "hono/cookie";
 import * as HttpStatusCode from "stoker/http-status-codes";
 
-import { createAdminClient } from "@/lib/client/appwrite";
-import { createAdminServer } from "@/lib/server/appwrite";
 import { AppRouteHandler } from "@/server/types";
 
 import { AUTH_COOKIE_EXPIRES } from "../constants";
@@ -38,12 +36,8 @@ export default class AuthController {
         fullname,
       });
 
-      const { account } = await createAdminServer();
-
-      const session = await account.getSession(response.data.$id);
-
       return context.json({
-        data: session,
+        data: response,
         success: true,
       });
     } catch (error) {
@@ -61,6 +55,14 @@ export default class AuthController {
     const params = context.req.valid("json");
 
     const response = await this.service.Verification(params);
+
+    setCookie(context, "jira-sh-auth", params.secret, {
+      httpOnly: true,
+      maxAge: AUTH_COOKIE_EXPIRES,
+      sameSite: "strict",
+      secure: true,
+      expires: params.expire,
+    });
     return context.json({
       payload: response.data,
       success: true,

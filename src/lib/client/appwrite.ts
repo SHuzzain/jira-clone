@@ -1,5 +1,4 @@
 import { Account, Client } from "appwrite";
-import "server-only";
 
 import { env } from "@/config/env";
 

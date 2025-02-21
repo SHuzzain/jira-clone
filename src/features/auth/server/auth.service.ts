@@ -1,6 +1,7 @@
 import { ID } from "appwrite";
 import { z } from "zod";
 
+import { env } from "@/config/env";
 import { createAdminClient } from "@/lib/client/appwrite";
 import { createAdminServer } from "@/lib/server/appwrite";
 
@@ -25,30 +26,38 @@ export default class AuthService {
     };
   }
 
-  async SignUp(data: z.infer<typeof signUpSchema>) {
-    const { email, password, fullname } = data;
+  async SignUp(values: z.infer<typeof signUpSchema>) {
+    const { email, password, fullname } = values;
 
     const { auth } = await createAdminServer();
+    const { account } = await createAdminClient();
 
-    const user = await auth.createBcryptUser(
+    const newUser = await auth.create(
       ID.unique(),
       email,
+      undefined,
       password,
       fullname
     );
 
+    await account.createMagicURLToken(
+      newUser.$id,
+      newUser.email,
+      env.NEXT_PUBLIC_BASE_URL.concat("/verify")
+    );
+
     return {
-      data: user,
+      data: newUser,
     };
   }
 
   async Verification(data: z.infer<typeof verificationSchema>) {
     const { account } = await createAdminClient();
-    const server = await createAdminServer();
-    const session = await account.createSession(data.userId, data.token);
+
+    const session = await account.createSession(data.userId, data.secret);
 
     return {
-      data: response,
+      data: session,
     };
   }
 }

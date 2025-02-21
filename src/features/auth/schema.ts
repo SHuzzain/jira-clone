@@ -41,9 +41,10 @@ export const signUpSchema = z
 
 export const verificationSchema = z
   .object({
-    token: z.string().min(1, "Minimum 6 characters").openapi({
-      example: "123456",
+    secret: z.string().min(1, "Minimum 6 characters").openapi({
+      description: "Token secret",
     }),
     userId: z.string().min(1, "Minimum 1 characters"),
+    expire: z.date(),
   })
   .openapi("Verification");

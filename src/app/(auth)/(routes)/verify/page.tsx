@@ -1,13 +1,17 @@
-import { cookies } from "next/headers";
 import React from "react";
 
 import VerifyCard from "@/features/auth/components/verify-card";
 
-const VerifyPage = async () => {
-  const cookieStore = await cookies();
-  const userId = cookieStore.get("user$Id");
+type Props = {
+  searchParams: Promise<{ userId: string, secret: string, expire: string; }>
+}
 
-  return <VerifyCard userId={userId?.value as string} />;
+const VerifyPage = async ({ searchParams }: Props) => {
+  const { secret, userId, expire } = await searchParams;
+
+  console.log({ secret, userId, expire })
+
+  return <VerifyCard userId={userId} secret={secret} expire={new Date(expire)} />;
 };
 
 export default VerifyPage;

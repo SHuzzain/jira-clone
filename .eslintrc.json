@@ -16,7 +16,11 @@
       "check-file/filename-naming-convention": [
         "error",
         {
-          "**/*.{ts,tsx}": "KEBAB_CASE"
+        "files": ["src/**/*.{ts,tsx}"],
+         "**/*.{ts,tsx}": "KEBAB_CASE"
+        },
+        {
+       
         }
       ],
       "check-file/folder-naming-convention": [

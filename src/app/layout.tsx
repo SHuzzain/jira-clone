@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 
+import Provider from "@/components/providers";
 import QueryProviders from "@/components/providers/tanstack-query-provider";
+import { Toaster } from "@/components/ui/toaster";
 
 import "./globals.css";
 
@@ -37,7 +39,7 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <QueryProviders>{children}</QueryProviders>
+        <Provider>{children}</Provider>
       </body>
     </html>
   );

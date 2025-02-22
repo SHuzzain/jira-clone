@@ -45,6 +45,8 @@ export const verificationSchema = z
       description: "Token secret",
     }),
     userId: z.string().min(1, "Minimum 1 characters"),
-    expire: z.date(),
+    expire: z
+      .string()
+      .refine((dateStr) => !isNaN(Date.parse(dateStr)), "Invalid date format"),
   })
   .openapi("Verification");

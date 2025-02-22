@@ -1,13 +1,13 @@
 "use client";
 
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import React, { useEffect } from "react";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { FaGithub } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
+import { toast } from "sonner";
 import * as z from "zod";
 
 import DottedSeparator from "@/components/dotted-separator";
@@ -27,7 +27,6 @@ import { signUpSchema } from "../schema";
 
 const SignUpCard = () => {
   const { mutate, isSuccess } = useSignup();
-  const router = useRouter();
   const form = useForm<z.infer<typeof signUpSchema>>({
     resolver: zodResolver(signUpSchema),
     defaultValues: {
@@ -40,9 +39,11 @@ const SignUpCard = () => {
 
   useEffect(() => {
     if (isSuccess) {
-      router.push("verify");
+      const email = form.getValues("email");
+      toast.success(
+        `Verification link sent to ${email}. Please check your inbox.`
+      );
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isSuccess]);
 
   const onSubmit = async (value: z.infer<typeof signUpSchema>) => {

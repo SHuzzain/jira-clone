@@ -1,2 +1,2 @@
-export const AUTH_COOKIE = "sh-jira-session";
-export const AUTH_COOKIE_EXPIRES = 360 * 60 * 24 * 30;
+export const AUTH_COOKIE = "a_session";
+export const AUTH_COOKIE_EXPIRES = 60 * 60 * 60 * 7;

@@ -1,4 +1,4 @@
-import { ID } from "appwrite";
+import { AppwriteException, ID } from "appwrite";
 import { z } from "zod";
 
 import { env } from "@/config/env";
@@ -16,12 +16,12 @@ export default class AuthService {
 
   async SignIn(data: z.infer<typeof signinSchema>) {
     const { email, password } = data;
+    const { account } = await createAdminClient();
+
+    const response = await account.createEmailPasswordSession(email, password);
 
     return {
-      data: {
-        email,
-        password,
-      },
+      data: response,
       success: true,
     };
   }
@@ -43,7 +43,7 @@ export default class AuthService {
     await account.createMagicURLToken(
       newUser.$id,
       newUser.email,
-      env.NEXT_PUBLIC_BASE_URL.concat("/verify")
+      env.NEXT_PUBLIC_BASE_URL.concat("/api/v1/auth/verification")
     );
 
     return {
@@ -52,12 +52,16 @@ export default class AuthService {
   }
 
   async Verification(data: z.infer<typeof verificationSchema>) {
-    const { account } = await createAdminClient();
+    try {
+      const { account } = await createAdminClient();
 
-    const session = await account.createSession(data.userId, data.secret);
+      const session = await account.createSession(data.userId, data.secret);
 
-    return {
-      data: session,
-    };
+      return {
+        data: session,
+      };
+    } catch (error) {
+      throw error as AppwriteException;
+    }
   }
 }

@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import React from "react";
 
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -25,7 +26,8 @@ import { useLogin } from "../invoke-api/user-login";
 import { signinSchema } from "../schema";
 
 const SignInCard = () => {
-  const { mutate } = useLogin();
+  const { mutateAsync } = useLogin();
+  const router = useRouter();
   const form = useForm<z.infer<typeof signinSchema>>({
     resolver: zodResolver(signinSchema),
     defaultValues: {
@@ -35,7 +37,8 @@ const SignInCard = () => {
   });
 
   const onSubmit = async (value: z.infer<typeof signinSchema>) => {
-    mutate({ json: value });
+    await mutateAsync({ json: value });
+    router.push("/");
   };
   return (
     <Card className="shadow-none border-none md:w-[487px] size-full">

@@ -3,6 +3,7 @@ import { notFound, onError } from "stoker/middlewares";
 import { defaultHook } from "stoker/openapi";
 
 import { pinologgerMW } from "../middleware/pino-logger";
+import { sessionMiddleware } from "../middleware/session-auth";
 import { AppBindings } from "../types";
 
 export function createRouter() {
@@ -15,6 +16,7 @@ export function createRouter() {
 export default function createApp() {
   const app = createRouter();
   app.use(pinologgerMW());
+  app.use(sessionMiddleware);
   app.onError(onError);
   app.notFound(notFound);
 

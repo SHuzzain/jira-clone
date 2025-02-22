@@ -46,12 +46,18 @@ const signup = createRoute({
 const verification = createRoute({
   tags: tags,
   path: "/verification",
-  method: "post",
+  method: "get",
   request: {
-    body: jsonContent(verificationSchema, "verification token"),
+    query: verificationSchema,
   },
   responses: {
-    [HttpStatusCode.OK]: jsonContent(ResponseSchema, "verify response"),
+    [HttpStatusCode.TEMPORARY_REDIRECT]: {
+      description: "Verification email sent",
+    },
+    [HttpStatusCode.INTERNAL_SERVER_ERROR]: jsonContent(
+      ErrorSchema,
+      "verification internal server error"
+    ),
   },
 });
 

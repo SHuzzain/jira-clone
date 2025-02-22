@@ -1,7 +1,9 @@
 "use client";
 
 import * as React from "react";
+
 import { BeatLoader } from "react-spinners";
+
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -25,7 +27,7 @@ function VerifyCard(props: VerifyProps) {
   const [status, setStatus] = React.useState("Verifying...");
 
   React.useEffect(() => {
-    if (props.userId && props.secret) {
+    if (props.userId && props.secret && props.expire) {
       mutate(
         { json: props },
         {
@@ -34,25 +36,24 @@ function VerifyCard(props: VerifyProps) {
         }
       );
     }
-  }, [props.userId, props.secret, mutate]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [props.userId, props.secret, props.expire, mutate]);
 
   return (
-    <div className="flex items-center justify-center bg-gray-100 px-4">
-      <Card className="w-[380px] rounded-2xl bg-white shadow-lg">
+    <div className="flex justify-center items-center bg-gray-100 px-4">
+      <Card className="bg-white shadow-lg rounded-2xl w-[380px]">
         <CardHeader className="text-center">
-          <CardTitle className="text-2xl font-semibold">Jira Clone</CardTitle>
-          <CardDescription className="text-gray-600">
-            {status}
-          </CardDescription>
+          <CardTitle className="font-semibold text-2xl">Jira Clone</CardTitle>
+          <CardDescription className="text-gray-600">{status}</CardDescription>
         </CardHeader>
         <CardContent className="flex justify-center py-6">
           {<BeatLoader color="#4F46E5" />}
         </CardContent>
-        <CardFooter className="w-full  flex justify-center">
+        <CardFooter className="flex justify-center w-full">
           <Button
             disabled={isPending}
             onClick={() => mutate({ json: props })}
-            className="w-full shadow-lg"
+            className="shadow-lg w-full"
           >
             Retry
           </Button>

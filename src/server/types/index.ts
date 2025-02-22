@@ -3,6 +3,8 @@ import { Context, Env, ValidationTargets } from "hono";
 import { PinoLogger } from "hono-pino";
 import { ZodSchema, z } from "zod";
 
+import { AdditionalContext } from "../middleware/session-auth";
+
 // for controller to service file
 
 type HasUndefined<T> = undefined extends T ? true : false;
@@ -38,8 +40,8 @@ export type HonoContext<
 
 // create app
 
-export interface AppBindings {
-  Variables: {
+export interface AppBindings extends AdditionalContext {
+  Variables: AdditionalContext["Variables"] & {
     logger: PinoLogger;
   };
 }
